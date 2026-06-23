@@ -2755,7 +2755,10 @@ function timeAgo(dateStr) {
 async function loadSessions() {
   const sessionList = document.getElementById('session-list');
   try {
-    const res = await fetch('/api/sessions');
+    const user = JSON.parse(localStorage.getItem('meridian_user') || '{}');
+    let url = '/api/sessions';
+    if (user.id) url += '?user_id=' + encodeURIComponent(user.id);
+    const res = await fetch(url);
     if (!res.ok) throw new Error(`Server error ${res.status}`);
     const data = await res.json();
     const sessions = data.sessions || [];
@@ -2826,7 +2829,10 @@ async function loadTimeline() {
     container.innerHTML = '<div class="timeline-empty">Loading timeline...</div>';
 
     try {
-        var res = await fetch('/api/sessions/all/timeline');
+        var user = JSON.parse(localStorage.getItem('meridian_user') || '{}');
+        var url = '/api/sessions/all/timeline';
+        if (user.id) url += '?user_id=' + encodeURIComponent(user.id);
+        var res = await fetch(url);
         var data = await res.json();
         var sessions = data.timeline || [];
 
@@ -3213,7 +3219,10 @@ const MeridianGraph = (function() {
   // ── Load all nodes from database ──
   async function loadAll() {
     try {
-      var res = await fetch('/api/sessions/graph/all');
+      var user = JSON.parse(localStorage.getItem('meridian_user') || '{}');
+      var url = '/api/sessions/graph/all';
+      if (user.id) url += '?user_id=' + encodeURIComponent(user.id);
+      var res = await fetch(url);
       var data = await res.json();
       var nodes = data.nodes || [];
       var links = data.links || data.edges || [];
