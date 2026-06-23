@@ -40,6 +40,7 @@ async def signup(req: AuthRequest):
         raise
     except Exception as e:
         error_msg = str(e)
+        print(f"SIGNUP ERROR: {error_msg}")  # This will show in Render logs
         if "already registered" in error_msg.lower():
             raise HTTPException(status_code=409, detail="An account with this email already exists")
         raise HTTPException(status_code=400, detail="Signup failed. Please try again.")
@@ -64,6 +65,7 @@ async def login(req: AuthRequest):
         raise
     except Exception as e:
         error_msg = str(e)
+        print(f"LOGIN ERROR: {error_msg}")  # This will show in Render logs
         if "invalid" in error_msg.lower() or "credentials" in error_msg.lower():
             raise HTTPException(status_code=401, detail="Invalid email or password")
         raise HTTPException(status_code=400, detail="Login failed. Please try again.")
